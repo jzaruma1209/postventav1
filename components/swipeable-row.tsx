@@ -37,19 +37,31 @@ export function SwipeableRow({
       contextX.value = translateX.value;
     })
     .onUpdate((event) => {
-      const newValue = contextX.value + event.translationX;
-      // Limit the swipe range
-      translateX.value = Math.max(-ACTION_WIDTH * 2, Math.min(ACTION_WIDTH * 2, newValue));
+      let newValue = contextX.value + event.translationX;
+      
+      // Prevent crossing over to the other side when closing
+      if (contextX.value > 10) {
+        // Started open on the right (swiped right) -> don't let it go past 0 to the left
+        newValue = Math.max(0, Math.min(ACTION_WIDTH * 2, newValue));
+      } else if (contextX.value < -10) {
+        // Started open on the left (swiped left) -> don't let it go past 0 to the right
+        newValue = Math.max(-ACTION_WIDTH * 2, Math.min(0, newValue));
+      } else {
+        // Started closed -> allow both sides
+        newValue = Math.max(-ACTION_WIDTH * 2, Math.min(ACTION_WIDTH * 2, newValue));
+      }
+      
+      translateX.value = newValue;
     })
     .onEnd((event) => {
-      if (event.translationX > SWIPE_THRESHOLD) {
-        // Swiped right - show left actions
+      const current = translateX.value;
+      const velocity = event.velocityX;
+      
+      if (current > SWIPE_THRESHOLD || (current > 0 && velocity > 500)) {
         translateX.value = withSpring(ACTION_WIDTH * 2, { damping: 20, stiffness: 200 });
-      } else if (event.translationX < -SWIPE_THRESHOLD) {
-        // Swiped left - show right actions
+      } else if (current < -SWIPE_THRESHOLD || (current < 0 && velocity < -500)) {
         translateX.value = withSpring(-ACTION_WIDTH * 2, { damping: 20, stiffness: 200 });
       } else {
-        // Snap back
         translateX.value = withSpring(0, { damping: 20, stiffness: 200 });
       }
     });

@@ -29,9 +29,17 @@ export default function MesasScreen() {
           <View style={styles.logoCircle}>
             <MaterialIcons name="restaurant" size={24} color="#fff" />
           </View>
-          <TouchableOpacity style={styles.addButton}>
-            <MaterialIcons name="add" size={28} color="#fff" />
-          </TouchableOpacity>
+          <View style={styles.headerIcons}>
+            <TouchableOpacity style={styles.headerIconBtn}>
+              <MaterialIcons name="filter-list" size={22} color="#333" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerIconBtn}>
+              <MaterialIcons name="swap-vert" size={22} color="#333" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.addButton}>
+              <MaterialIcons name="add" size={26} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <ScrollView
@@ -130,10 +138,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerIconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   addButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: '#222',
     alignItems: 'center',
     justifyContent: 'center',
