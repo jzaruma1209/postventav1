@@ -12,22 +12,56 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#ffffff',
+        tabBarInactiveTintColor: '#888888',
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          borderRadius: 30,
+          height: 60,
+          paddingBottom: 5,
+          paddingTop: 5,
+          position: 'absolute',
+          bottom: 25,
+          left: 30,
+          right: 30,
+          borderTopWidth: 0,
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'ventas',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="dollarsign.circle" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="mesas"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Mesas',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="tablecells.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="resumen"
+        options={{
+          title: 'resumen',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chart.bar.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="bodega"
+        options={{
+          title: 'Bodega',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="shippingbox.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="gestion"
+        options={{
+          title: 'Gestion',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
         }}
       />
     </Tabs>

@@ -1,98 +1,286 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const FILTERS = ['comidas rapidas', 'bebidas', 'combos', 'bebidas', 'pedidos'];
+
+const MESAS_POR_COBRAR = [
+  {
+    id: '1',
+    name: 'mesa 1',
+    price: '9.75$',
+    nota: 'nota: client con camiseta roja',
+  },
+  {
+    id: '2',
+    name: 'pedido 1',
+    price: '9.75$',
+    nota: '',
+  },
+  {
+    id: '3',
+    name: 'mesa 1',
+    price: '9.75$',
+    nota: '',
+  },
+  {
+    id: '4',
+    name: 'mesa 1',
+    price: '9.75$',
+    nota: '',
+  },
+  {
+    id: '5',
+    name: 'mesa 1',
+    price: '9.75$',
+    nota: '',
+  },
+  {
+    id: '6',
+    name: 'mesa 1',
+    price: '9.75$',
+    nota: '',
+  },
+];
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [activeFilter, setActiveFilter] = useState(-1);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.logoCircle}>
+            <MaterialIcons name="restaurant" size={24} color="#fff" />
+          </View>
+        </View>
+
+        {/* Filters */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.filtersScroll}
+          contentContainerStyle={styles.filtersContent}
+        >
+          {FILTERS.map((filter, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.filterChip,
+                activeFilter === index && styles.filterChipActive,
+              ]}
+              onPress={() => setActiveFilter(activeFilter === index ? -1 : index)}
+            >
+              <Text
+                style={[
+                  styles.filterText,
+                  activeFilter === index && styles.filterTextActive,
+                ]}
+              >
+                {filter}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        {/* Action Buttons */}
+        <View style={styles.actionButtons}>
+          <TouchableOpacity style={styles.actionBtn}>
+            <View style={styles.actionBtnIcon}>
+              <MaterialIcons name="add" size={22} color="#fff" />
+            </View>
+            <Text style={styles.actionBtnText}>Mesa</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtn}>
+            <View style={styles.actionBtnIcon}>
+              <MaterialIcons name="add" size={22} color="#fff" />
+            </View>
+            <Text style={styles.actionBtnText}>cobro fast</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Mesas por cobrar */}
+        <Text style={styles.sectionTitle}>Mesas por cobrar</Text>
+
+        <ScrollView
+          style={styles.mesasList}
+          contentContainerStyle={styles.mesasContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {MESAS_POR_COBRAR.map((mesa) => (
+            <View key={mesa.id} style={styles.mesaItem}>
+              <View style={styles.mesaImageContainer}>
+                <View style={styles.mesaImage}>
+                  <MaterialIcons name="lunch-dining" size={28} color="#a0785a" />
+                </View>
+              </View>
+              <View style={styles.mesaInfo}>
+                <Text style={styles.mesaName}>{mesa.name}</Text>
+                {mesa.nota ? (
+                  <Text style={styles.mesaNota} numberOfLines={1}>{mesa.nota}</Text>
+                ) : null}
+              </View>
+              <Text style={styles.mesaPrice}>{mesa.price}</Text>
+              <TouchableOpacity style={styles.mesaMenu}>
+                <MaterialIcons name="more-vert" size={20} color="#333" />
+              </TouchableOpacity>
+            </View>
+          ))}
+          {/* Spacer for bottom tab bar */}
+          <View style={{ height: 100 }} />
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
+
+  /* Header */
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
   },
-  stepContainer: {
+  logoCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#222',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  /* Filters */
+  filtersScroll: {
+    maxHeight: 44,
+    paddingLeft: 16,
+  },
+  filtersContent: {
     gap: 8,
+    paddingRight: 16,
+    alignItems: 'center',
+  },
+  filterChip: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 20,
+    backgroundColor: '#333',
+  },
+  filterChipActive: {
+    backgroundColor: '#000',
+  },
+  filterText: {
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: '500',
+  },
+  filterTextActive: {
+    color: '#fff',
+    fontWeight: '700',
+  },
+
+  /* Action Buttons */
+  actionButtons: {
+    paddingHorizontal: 40,
+    marginTop: 20,
+    gap: 12,
+  },
+  actionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 16,
+    paddingVertical: 16,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  actionBtnIcon: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#222',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionBtnText: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#222',
+  },
+
+  /* Section Title */
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#888',
+    paddingHorizontal: 16,
+    marginTop: 20,
     marginBottom: 8,
+    fontStyle: 'italic',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+
+  /* Mesas List */
+  mesasList: {
+    flex: 1,
+  },
+  mesasContent: {
+    paddingHorizontal: 16,
+  },
+  mesaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  mesaImageContainer: {
+    marginRight: 12,
+  },
+  mesaImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#f5efe8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mesaInfo: {
+    flex: 1,
+    marginRight: 8,
+  },
+  mesaName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#222',
+  },
+  mesaNota: {
+    fontSize: 10,
+    color: '#aaa',
+    marginTop: 2,
+    fontStyle: 'italic',
+  },
+  mesaPrice: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#222',
+    marginRight: 4,
+  },
+  mesaMenu: {
+    padding: 4,
   },
 });
